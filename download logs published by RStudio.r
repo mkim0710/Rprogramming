@@ -1,6 +1,6 @@
 
 #### Advanced R Programming - Roger D. Peng, PhD
-# download logs published by RStudio from their mirror of the Comprehensive R Archive Network (CRAN)
+#@ download logs published by RStudio from their mirror of the Comprehensive R Archive Network (CRAN)
 
 library(dplyr)
 library(readr)
