@@ -79,3 +79,26 @@ num_download(c("filehash", "weathermetrics"))
 1       filehash   179
 2 weathermetrics     7
 
+
+#@ Argument Checking
+num_download <- function(pkgname, date = "2016-07-20") {
+        check_pkg_deps()
+
+        ## Check arguments
+        if(!is.character(pkgname))
+                stop("'pkgname' should be character")
+        if(!is.character(date))
+                stop("'date' should be character")
+        if(length(date) != 1)
+                stop("'date' should be length 1")
+
+        dest <- check_for_logfile(date)
+        cran <- read_csv(dest, col_types = "ccicccccci", 
+                         progress = FALSE)
+        cran %>% filter(package %in% pkgname) %>% 
+                group_by(package) %>%
+                summarize(n = n())
+}    
+num_download("filehash", c("2016-07-20", "2016-0-21"))
+Error in num_download("filehash", c("2016-07-20", "2016-0-21")): 'date' should be length 1
+
