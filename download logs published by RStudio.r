@@ -39,12 +39,23 @@ check_for_logfile <- function(date) {
         }
         dest
 }
+
+## Dependency Checking
+check_pkg_deps <- function() {
+        if(!require(readr)) {
+                message("installing the 'readr' package")
+                install.packages("readr")
+        }
+        if(!require(dplyr))
+                stop("the 'dplyr' package needs to be installed first")
+}
+
 num_download <- function(pkgname, date = "2016-07-20") {
+        check_pkg_deps()
         dest <- check_for_logfile(date)
         cran <- read_csv(dest, col_types = "ccicccccci", progress = FALSE)
         cran %>% filter(package == pkgname) %>% nrow
-}  
-
+}
 
 # > num_download("Rcpp", "2016-07-19")
 # [1] 13572
