@@ -24,5 +24,27 @@ num_download <- function(pkgname, date) {
         cran %>% filter(package == pkgname) %>% nrow
 }
 
+
+
+## Re-factoring code
+check_for_logfile <- function(date) {
+        year <- substr(date, 1, 4)
+        src <- sprintf("http://cran-logs.rstudio.com/%s/%s.csv.gz",
+                       year, date)
+        dest <- file.path("data", basename(src))
+        if(!file.exists(dest)) {
+                val <- download.file(src, dest, quiet = TRUE)
+                if(!val)
+                        stop("unable to download file ", src)
+        }
+        dest
+}
+num_download <- function(pkgname, date = "2016-07-20") {
+        dest <- check_for_logfile(date)
+        cran <- read_csv(dest, col_types = "ccicccccci", progress = FALSE)
+        cran %>% filter(package == pkgname) %>% nrow
+}  
+
+
 # > num_download("Rcpp", "2016-07-19")
 # [1] 13572
