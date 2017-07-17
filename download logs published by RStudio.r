@@ -26,7 +26,7 @@ num_download <- function(pkgname, date) {
 
 
 
-## Re-factoring code
+#@ Re-factoring code
 check_for_logfile <- function(date) {
         year <- substr(date, 1, 4)
         src <- sprintf("http://cran-logs.rstudio.com/%s/%s.csv.gz",
@@ -40,7 +40,7 @@ check_for_logfile <- function(date) {
         dest
 }
 
-## Dependency Checking
+#@ Dependency Checking
 check_pkg_deps <- function() {
         if(!require(readr)) {
                 message("installing the 'readr' package")
@@ -59,3 +59,23 @@ num_download <- function(pkgname, date = "2016-07-20") {
 
 # > num_download("Rcpp", "2016-07-19")
 # [1] 13572
+
+
+#@ Vectorization
+## 'pkgname' can now be a character vector of names
+num_download <- function(pkgname, date = "2016-07-20") {
+        check_pkg_deps()
+        dest <- check_for_logfile(date)
+        cran <- read_csv(dest, col_types = "ccicccccci", progress = FALSE)
+        cran %>% filter(package %in% pkgname) %>% 
+                group_by(package) %>%
+                summarize(n = n())
+}    
+
+num_download(c("filehash", "weathermetrics"))
+# A tibble: 2 × 2
+         package     n
+           <chr> <int>
+1       filehash   179
+2 weathermetrics     7
+
