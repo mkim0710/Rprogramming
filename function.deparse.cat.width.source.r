@@ -1,5 +1,5 @@
 function.deparse.cat.width = function(x, width.cutoff = 500) {
-  # source("https://github.com/mkim0710/Rprogramming/raw/master/function.deparse.cat.width.source.r")
+  # source("https://github.com/mkim0710/tidystat/raw/master/function.deparse.cat.width.source.r")
   cat(deparse(x, width.cutoff = width.cutoff), sep = "\n")
 }
 
